@@ -14,24 +14,25 @@ typedef struct ingredient{
       // inin hehe ;
        char donvi[50];
      float soluong;
-     int o;
+    // int o;
 }in;
 
 void nhapin(in*a){
+    int o;
     printf("\nnhap ten nguyen lieu : ");
     fgets(a->name,sizeof(a->name),stdin);
     a->name[strcspn(a->name,"\n")]=0;    
     printf(" chon don vi (kg/l/cai)(1,2,3)");
-    scanf("%d",&a->o);
+    scanf("%d",&o);
     fflush(stdin);
-    if(a->o == 1) strcpy(a->donvi,"kg");
-    if(a->o == 2) strcpy(a->donvi,"l");
-    if(a->o == 3) strcpy(a->donvi,"cai");
+    if(o == 1) strcpy(a->donvi,"kg");
+    if(o == 2) strcpy(a->donvi,"l");
+    if(o == 3) strcpy(a->donvi,"cai");
     printf("nhap ve bao nhieu (%s) : ",&a->donvi); 
     scanf("%f",&a->soluong);
     fflush(stdin);
-    printf("nhap ma cho %s : ", a->name);
-    scanf("%d",&a->code);
+    //printf("nhap ma cho %s : ", a->name);
+    //scanf("%d",&a->code);
   //  a->code[strcspn(a->code,"\n")]=0;
   fflush(stdin);
 }
@@ -40,7 +41,7 @@ typedef struct namefood{
     char name[50];
     in * haha ;//tao nguyen lieu cho do uong
     int h; // tao so luong nguyen lieu cho do an , do uong 
-    float cost ;
+    float cost ;//gia cua do an/ do uong
 }namefood;
 
 void innamefood(namefood*a, int N ,in *b ){ // N: số lượng nguyên liệu
@@ -51,7 +52,7 @@ void innamefood(namefood*a, int N ,in *b ){ // N: số lượng nguyên liệ
      printf(" don vi cua %s : ", a->name);
      scanf("%s",&a->donvi);
      fflush(stdin);
-     printf("gia cua %s la : ",a->name);
+     printf("gia cua %s la (dong) : ",a->name);
      scanf("%f",&a->cost);
      printf("nhap so luong nguyen lieu cho %s: ", a->name);
      scanf("%d",&a->h);
@@ -72,21 +73,31 @@ void innamefood(namefood*a, int N ,in *b ){ // N: số lượng nguyên liệ
 }
  typedef struct bill{
     char name[50];
-    int number;
+    int number;// so luong do mua 
     float cost;
     char donvi[50];
 
  }bill;
  
- void check(in *a, namefood *b,int N,int A ){
-  int k = 9000;
-  int u;
+ void check(in *a, namefood *b,int N,int A ){ // kiem tra coi co bao nhieu san pham de thong bao cho khach hang chon
+  
+
   printf("hien quan con : ");
   for(int m=0;m<A;m++){
-  for ( int i=0 ;i<b->h;i++)  
-  for(int j=0 ;j<N ;j++ ) if(a[j].code == b[m].haha[i].code)  if(k > (a[j].soluong/b[m].haha[i].soluong) ) k= (a[j].soluong/b[m].haha[i].soluong) ;
+    int k=9000;
+    for ( int i=0 ;i<b->h;i++){  
+      for(int j=0 ;j<N ;j++ ){
+        if(a[j].code == b[m].haha[i].code){
+          int min =a[j].soluong/b[m].haha[i].soluong;
+          if(k>min) k=min;
+        }  //if(k >= (a[j].soluong/b[m].haha[i].soluong) ) k= (a[j].soluong/b[m].haha[i].soluong) ;
+  //k=(k>(a[j].soluong/b[m].haha[i].soluong))? (a[j].soluong/b[m].haha[i].soluong) : k ;
+      }  
+    }
+
   printf("\n %s con lai : %d (%s)^^",b[m].name,k,b[m].donvi);  
-  k=9000;  }
+  
+  }  
   }
 void tonkho(namefood * b ,int N, in * a, int k){
   for(int i=0 ; i< b->h;i++ ) 
@@ -107,12 +118,28 @@ void check1(namefood *b,int * k,in*a,int N,int *number){
               getchar();
               continue;            
               }
-            else c='y';
-                                                }
-
-                    }
+            else c='y';                          }
+                  }
 }
 
+typedef struct customer{
+    char name[50];
+    bill * bill; // hoa don moi mon hang ma khach hang mua
+    float money;
+    int number; // so luong hang ma khach hang da mua 
+}cus;
+
+void incustomer(cus *a){
+   printf("nhap ten khach hang vao");
+   fgets(a->name,sizeof(a->name),stdin);
+   a->name[strcspn(a->name,"\n")]=0;
+}
+void xuatcustomer(cus * a){
+   printf("\n%s da mua : ",a->name);
+   for(int i=0 ; i< a->number;i++) printf("\n %s : %d (%s)",a->bill[i].name,a->bill[i].number,a->bill[i].donvi);
+   printf("\n tong tien hoa don : %f",a->money);
+
+}
 
  
 
@@ -127,55 +154,69 @@ int main(){
     for(int i=0 ; i<N;i++){ 
         printf("nguyen lieu %d",i+1);
         nhapin(&a[i]);
+        a[i].code = i;
     }
-    int A;
+    int A; // so loai do uong , do an
     printf("nhap so loai do uong , do an vao ");
     scanf("%d",&A);
     getchar();
     // tao ten do uong , thuc an 
     namefood *b;
     b=(namefood*)malloc(A*sizeof(namefood));
-    for(int i=0 ; i< A ; i++) innamefood(&b[i],N,a);
+    for(int i=0 ; i< A ; i++)       innamefood(&b[i],N,a);
+  
 // chon do an
   //  printf("moi khach hang chon do an / do uong : ");
+  cus * customer =NULL;
+  char khach = 'y';
+  int member =0;
+  while(khach == 'y' || khach == 'Y'){
+    customer = (cus*)realloc(customer,(member+1)*sizeof(cus));
+    incustomer(&customer[member]);
+
     char c = 'y';
     int p=0;
     float money =0 ;
-    bill * m= NULL ;
+    customer[member].bill=NULL;
+    //bill * m= NULL ;
     while(c=='y' || c=='Y'){
-      printf("moi khach hang chon do an / do uong : ");      
+      printf("moi %s chon do an / do uong : ",customer[member].name);      
         check (a,b,N,A );
         for(int i=0;i<A;i++)    printf("\n %s ------> %d ", b[i].name , i );
                                 printf("\n");
                                 int k,number;
                                 scanf("%d",&k);
                                 getchar();
-                                printf("quy khach muon dung bao nhieu %s : ", b [k].name);
+                                printf("%s muon dung bao nhieu %s : ",customer[member].name, b [k].name);
                                 scanf("%d",&number);
                                 getchar();
                                 check1(b,&k,a,N,&number);
 
-                                m=(bill*)realloc(m,(p+1)*sizeof(bill));
-                                strcpy(m[p].name,b[k].name);
-                                strcpy(m[p].donvi,b[k].donvi);                                
+                                customer[member].bill=(bill*)realloc(customer[member].bill,(p+1)*sizeof(bill));
+                                strcpy(customer[member].bill[p].name,b[k].name);
+                                strcpy(customer[member].bill[p].donvi,b[k].donvi);                                
                                 //printf("quy khach muon dung bao nhieu %s : ", b [k].name);
                                 //scanf("%d",&m[p-1].number);
                                 //fflush(stdin);
-                                m[p].number=number;
-                                money = money + b[k].cost * m[p].number ;
-                                tonkho(&b[k],N,a,m[p-1].number);
+                                customer[member].bill[p].number=number;
+                                customer[member].money += b[k].cost * customer[member].bill[p].number ;
+                                tonkho(&b[k],N,a,customer[member].bill[p-1].number);
                                 printf("quy khach muon mua nua ko (y/n)?");
                                 scanf("%c",&c);
                                 p++;
+                                customer[member].number=p;
     }
+   printf("\nkhach hang thu %d cua cua hang ",member+1) ;
+   xuatcustomer(&customer[member]);
+   printf("\n co khach hang thu %d khong (y/n)",member+1);
+   scanf("%c",&khach);
+
+   
+  }
 
 
-    printf("khach da mua : ");
-    for(int i=0 ; i<p;i++)
-      printf("\n %s :%d(%s)  ",m[i].name,m[i].number,m[i].donvi);
-    printf("\ntong tien : %f",money);
 free(a);
 free(b);
-free(m);    
+free(customer);    
     
 }
