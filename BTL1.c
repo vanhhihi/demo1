@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<limits.h>
 
 /*typedef struct iningredient{
    //  char name[50];
@@ -39,8 +40,8 @@ void nhapin(in*a){
 typedef struct namefood{
     char donvi[50];
     char name[50];
-    in * haha ;//tao nguyen lieu cho do uong
-    int h; // tao so luong nguyen lieu cho do an , do uong 
+    in * ingredient ;//tao nguyen lieu cho do uong
+    int in_number; // tao so luong nguyen lieu cho do an , do uong 
     float cost ;//gia cua do an/ do uong
 }namefood;
 
@@ -49,25 +50,26 @@ void innamefood(namefood*a, int N ,in *b ){ // N: số lượng nguyên liệ
      fgets(a->name,sizeof(a->name),stdin);
    //  fflush(stdin);    
      a->name[strcspn(a->name, "\n")] = 0;
-     printf(" don vi cua %s : ", a->name);
+     printf("don vi cua %s : ", a->name);
      scanf("%s",&a->donvi);
      fflush(stdin);
+    //a->name[strcspn(a->name,"\n")]=0;
      printf("gia cua %s la (dong) : ",a->name);
      scanf("%f",&a->cost);
      printf("nhap so luong nguyen lieu cho %s: ", a->name);
-     scanf("%d",&a->h);
+     scanf("%d",&a->in_number);
    //  a->haha * c;
-     a->haha =(in*)malloc(a->h*sizeof(in));
+     a->ingredient =(in*)malloc(a->ingredient*sizeof(in));
      for(int i=0 ; i < a->h;i++){
         int k;
         printf("nguyen lieu %d la : \n",i+1);
         for(int j =0; j< N ; j++)    printf("%s ----> %d  \n",b[j].name,j);
         scanf("%d",&k);
-        a->haha[i].code=b[k].code;
-        strcpy(a->haha[i].name,b[k].name);
-        strcpy(a->haha[i].donvi,b[k].donvi);
-        printf("%s can bao nhieu %s : ",a->haha[i].name,a->haha[i].donvi );
-        scanf("%f",&a->haha->soluong);
+        a->ingredient[i].code=b[k].code;
+        strcpy(a->ingredient[i].name,b[k].name);
+        strcpy(a->ingredient[i].donvi,b[k].donvi);
+        printf("%s can bao nhieu %s : ",a->ingredient[i].name,a->ingredient[i].donvi );
+        scanf("%f",&a->ingredient->soluong);
         fflush(stdin);
      }
 }
@@ -79,16 +81,15 @@ void innamefood(namefood*a, int N ,in *b ){ // N: số lượng nguyên liệ
 
  }bill;
  
- void check(in *a, namefood *b,int N,int A ){ // kiem tra coi co bao nhieu san pham de thong bao cho khach hang chon
+ void check(in *a, namefood *b,int a_number,int b_number ){ // kiem tra coi co bao nhieu san pham de thong bao cho khach hang chon
   
-
   printf("hien quan con : ");
-  for(int m=0;m<A;m++){
-    int k=9000;
+  for(int m=0;m<b_number;m++){
+    int k=INT_MAX;
     for ( int i=0 ;i<b->h;i++){  
-      for(int j=0 ;j<N ;j++ ){
-        if(a[j].code == b[m].haha[i].code){
-          int min =a[j].soluong/b[m].haha[i].soluong;
+      for(int j=0 ;j<a_number ;j++ ){
+        if(a[j].code == b[m].ingredient[i].code){
+          int min =(int)( a[j].soluong/b[m].ingredient[i].soluong);
           if(k>min) k=min;
         }  //if(k >= (a[j].soluong/b[m].haha[i].soluong) ) k= (a[j].soluong/b[m].haha[i].soluong) ;
   //k=(k>(a[j].soluong/b[m].haha[i].soluong))? (a[j].soluong/b[m].haha[i].soluong) : k ;
@@ -99,20 +100,20 @@ void innamefood(namefood*a, int N ,in *b ){ // N: số lượng nguyên liệ
   
   }  
   }
-void tonkho(namefood * b ,int N, in * a, int k){
+void tonkho(namefood * b ,int a_number, in * a, int k){
   for(int i=0 ; i< b->h;i++ ) 
-    for(int j=0 ;j<N;j++) if(b->haha[i].code==a[j].code) a[j].soluong-=b->haha[i].soluong*k ;
+    for(int j=0 ;j<a_number;j++) if(b->ingredient[i].code==a[j].code) a[j].soluong-=b->ingredient[i].soluong*k ;
 }
-void check1(namefood *b,int * k,in*a,int N,int *number){
+void check1(namefood *b,int * code,in*a,int a_number,int *number){
        char c ='n';
        while(c=='n'){
-         for(int i=0 ;i<b[*k].h;i++)
-          for(int j=0 ;j<N ;j++) 
-            if(b[*k].haha[i].code == a[j].code) {
-              if(b[*k].haha[i].soluong * *number > a[j].soluong ){ 
+         for(int i=0 ;i<b[*code].h;i++)
+          for(int j=0 ;j<a_number ;j++) 
+            if(b[*code].ingredient[i].code == a[j].code) {
+              if(b[*code].ingredient[i].soluong * *number > a[j].soluong ){ 
               printf("ko du so luong nen hay nhap lai ma do an / do uong ^^");
               printf("\nma do uong : ");
-              scanf("%d",k);             
+              scanf("%d",code);             
               printf("so luong : ");
               scanf("%d",number) ;
               getchar();
@@ -141,7 +142,7 @@ void xuatcustomer(cus * a){
 
 }
 
- 
+
 
 int main(){
     printf("nhap so luong nguyen lieu : ");
