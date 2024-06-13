@@ -1,11 +1,12 @@
 #include<iostream>
 #include"hello.h"
 #include<vector>  
+#include<fstream>
 using namespace std;
 class menuchung{
 private:
-        void TDO(), XDO();
-        void QLDO();
+        void QLDO(), TDO(), XDO(),TTDO();
+          
        vector<namedrink> drink;
        vector<rubbish> rubbish;
         int k;
@@ -44,8 +45,9 @@ public:
         system("cls");
         printf("================QUAN LY DO UONG================");
         printf("\n1. Them do uong");
-        printf("\n2. Xoa do uong ");    
-        printf("\n3. Quay lai");
+        printf("\n2. Xoa do uong ");
+        printf("\n3. thong tin cua tat ca do uong");    
+        printf("\n4. Quay lai");
         printf("\n==============================================");
         printf("\nchon muc : ");
         scanf("%d",&k);
@@ -55,7 +57,9 @@ public:
                 break;
             case 2:XDO();
                 break;
-            case 3:MENU();
+            case 3:TTDO();
+                break; 
+            case 4:MENU();
                 break;
         }
     }
@@ -104,7 +108,7 @@ public:
         namedrink::n--;
         system("cls");
         printf("============================");
-        printf("\nban da xoa do uong : ");
+      //  printf("\nban da xoa do uong : ");
      //   xuatrubbish(rubbish[rubbish::number-1]);
         printf("\n1. Tiep tuc xoa ");
         printf("\n2. Quay lai ");
@@ -117,8 +121,31 @@ public:
                 QLDO();
                 break;
         }
-
-
+    }
+    void menuchung::TTDO(){
+        int k;
+        system("cls");
+        printf("============================");
+        for(int i=0 ; i<namedrink::n;i++){ 
+        printf("\n");
+        printf("%d. ",i+1);   
+        xuatdrink(drink[i]);
+        printf("\n");
+        printf("============================");
+        }
+        //printf("\n1. chon do uong");
+        printf("\n1. them do uong");
+        printf("\n2. xoa do uong");
+        printf("\n3. quay lai");
+        scanf("%d",&k);
+        switch(k){
+            case 1:TDO();
+                    break;
+            case 2:XDO();
+                    break;
+            case 3:QLDO();
+                    break;        
+        }
     }
 int main(){
     menuchung m1;
