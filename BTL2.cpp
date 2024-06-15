@@ -1,21 +1,23 @@
 #include<iostream>
-#include"hello.h"
+//#include"hello.h"
 #include<vector>  
 #include<fstream>
+#include"buy.h"
 using namespace std;
 class menuchung{
 private:
         void QLDO(), TDO(), XDO(),TTDO();
-          
-       vector<namedrink> drink;
-       vector<rubbish> rubbish;
+        void BUY(),taobill(),lenbill();
+        vector<namedrink> drink;
+        vector<Bill> bill;
         int k;
+     //   int namedrink::n =0
 public:
     void MENU(){
        system("cls");
         printf("================QUAN LY HE THONG================");
         printf("\n1. Quan ly do uong ");
-       // printf("\n2. Quan ly khach hang");
+        printf("\n2. Mua hang");
       //  printf("\n3. Quan ly nhan vien ");
       //  printf("\n4. Quan ly bill");
         printf("\n5. Thoat chuong trinh");
@@ -25,11 +27,9 @@ public:
         switch (k){
             case 1: QLDO(); 
                 break;
- /*           case 2: QLKH();
+            case 2: BUY();
                 break;
-            case 3: QLNV();
-                break;
-            case 4: QLB();
+/*            case 3: QLNV();s
                 break;
             default: {
                 printf(" nhap sai roi ");
@@ -147,8 +147,89 @@ public:
                     break;        
         }
     }
+
+void menuchung::BUY(){
+    int pick;
+    system("cls");
+    printf("------------------------------------------------------------\n");
+    printf("| %3s | %25s \t|  %10s   |\n","STT","TEN DO UONG"," GIA DO UONG ");
+    for(int i= 0 ; i< namedrink::n;i++){
+        printf("------------------------------------------------------------\n");
+        printf("| %2d  ",i+1);
+        bangnamedrink(drink[i]);
+    }
+    printf("------------------------------------------------------------\n");
+    printf("1. tao bill");
+    printf("\n2. quay lai");
+    printf("\nchon muc :  ");
+    cin>>pick;
+    switch(pick){
+        case 1 : taobill();
+                break;
+        case 2 : MENU();
+                break;
+    }
+
+}
+
+
+void menuchung::taobill(){
+        int pick;
+        int dem =0;
+        int thoat =1 ;
+        xoadong(4);
+        bill.resize(Bill::n+1);
+       // printf("ban chon do uong nao : \n");
+       // printf("chon 0 neu ban ko muon mua :\n");
+       // scanf("%d",&pick);
+        while(thoat){
+            printf("chon 0 neu ban ko muon mua :\n");
+            printf("ban chon do uong nao : \n");
+            scanf("%d",&pick);
+            if(pick == 0 ) break;
+            xoadong(4);
+            bill[Bill::n].billdrink.resize(bill[Bill::n].number+1);
+            strcpy( bill[Bill::n].billdrink[bill[Bill::n].number].name , drink[pick-1].name);
+            bill[Bill::n].billdrink[bill[Bill::n].number].cost = drink[pick-1].cost;
+            printf("muon mua bao nhieu %s : ", drink[pick-1].name);
+            cin>>bill[Bill::n].billdrink[bill[Bill::n].number].soluong;
+            bill[Bill::n].tong += drink[pick-1].cost * bill[Bill::n].billdrink[bill[Bill::n].number].soluong;
+            dem =1;
+            bill[Bill::n].number++;
+            xoadong(2);
+            printf(" mua do uong tiep ko ");
+            printf("\n 1 : co ");
+            printf("\n 0 : ko ");
+            cin>>thoat;
+            xoadong(4);
+        }
+    xuatbill(bill[Bill::n]);
+    char c ;
+    cout<<"viet chu bat ki de tiep tuc";
+    cin>>c;
+    while(c){
+        system("cls");
+        if(dem == 0) {   BUY();
+        break;
+        }
+        if(dem == 1){
+            Bill::n ++;
+            BUY();
+            break;
+        }
+    }
+
+
+    
+
+}
+    
+
+
+
+
+
 int main(){
     menuchung m1;
     m1.MENU();
-
 }
