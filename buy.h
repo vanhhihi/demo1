@@ -10,7 +10,7 @@ typedef struct billdrink{
 }Billdrink;
 
 void bangnamedrink(namedrink a){
-    printf("| %18s \t\t|  %7.2lf(dong)   |\n",a.name,a.cost);
+    printf("| %18s \t\t|  %7.2lf(dong)  |\n",a.name,a.cost);
 }
 typedef struct bill{
     static int n;
