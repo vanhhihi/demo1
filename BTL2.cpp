@@ -3,11 +3,13 @@
 #include<vector>  
 #include<fstream>
 #include"buy.h"
+#include"hung.h"
 using namespace std;
 class menuchung{
 private:
         void QLDO(), TDO(), XDO(),TTDO();
         void BUY(),taobill(),lenbill();
+        void TNV(),QLNV(),XNV(),TKNV(),SXDSNV(),DSNV(),STTNV();   
         vector<namedrink> drink;
         vector<Bill> bill;
         int k;
@@ -18,7 +20,7 @@ public:
         printf("================QUAN LY HE THONG================");
         printf("\n1. Quan ly do uong ");
         printf("\n2. Mua hang");
-      //  printf("\n3. Quan ly nhan vien ");
+        printf("\n3. Quan ly nhan vien ");
       //  printf("\n4. Quan ly bill");
         printf("\n5. Thoat chuong trinh");
         printf("\n=================================================");
@@ -29,13 +31,13 @@ public:
                 break;
             case 2: BUY();
                 break;
-/*            case 3: QLNV();s
+            case 3: QLNV();
                 break;
             default: {
                 printf(" nhap sai roi ");
                 MENU();
             }
-                break;*/
+                break;
             case 5: break;    
         }
     }
@@ -205,7 +207,7 @@ void menuchung::taobill(){
         }
     xuatbill(bill[Bill::n]);
     char c ;
-    cout<<"viet chu bat ki de tiep tuc";
+    cout<<"viet chu bat ki de tiep tuc : ";
     cin>>c;
     while(c){
         system("cls");
@@ -223,13 +225,214 @@ void menuchung::taobill(){
     
 
 }
-    
+    void menuchung::QLNV(){
+        system("cls");
+        printf("==============QUAN LY NHAN VIEN==============");
+        printf("\n1. Them nhan vien.");
+        printf("\n2. Danh sach nhan vien.");
+        printf("\n3. Tim kiem nhan vien theo keyword.");
+        printf("\n4. Quay lai.");
+        printf("\n=============================================");
+        printf("\nChon muc: ");
+        scanf("%d",&k);
+        fflush(stdin);
+        switch (k){
+            case(1):
+                TNV();
+                break;
+            case(2):
+            	DSNV();
+            	break;
+            case(3):
+                TKNV();
+                break;
+            case(4):
+                MENU();
+                break;
+        }
+    }
+    void menuchung::TNV(){ 
+        system("cls");
+        Nhapdanhsachnhanvien(ds,t,n,tongluong);
+        printf("\n============================");
+        printf("\n1. Tiep tuc them nhan vien. ");
+        printf("\n2. Quay lai.");
+        printf("\n============================");
+        printf("\nChon muc: ");
+        scanf("%d",&k);
+        switch(k){
+            case(1):
+                TNV();
+                break;
+            case(2):
+                QLNV();
+                break;
+        }
+    } 
+
+    void menuchung::XNV(){
+    	printf("Nhap ma cua nhan vien can xoa: ");scanf("%d",&k);
+    	XoaNhanVienTheoMa(ds,n,k,tongluong);
+    	printf("\n===================================");
+    	printf("\n------THAO TAC TREN DANH SACH------");
+    	printf("\n1. Xoa nhan vien.");
+    	printf("\n2. Sap xep danh sach theo thu tu alpha B.");
+    	printf("\n3. Sua thong tin nhan vien.");
+        printf("\n4. Quay lai.");
+        printf("\n===================================");
+        printf("\nChon muc: ");
+        scanf("%d",&k);
+        switch(k){
+            case(1):
+                XNV();
+                break;
+            case(2):
+                SXDSNV();
+                break;
+            case(3):
+            	STTNV();
+                break;
+            case(4):
+            	QLNV();
+            	break;
+        }
+    }
+    void menuchung::TKNV(){
+    	char ten[25];
+    	system("cls");
+    	printf("Nhap keyword trong ten nhan vien can tim: ");fflush(stdin);
+    	fgets(ten,sizeof(ten),stdin);
+    	xoaXuongDong(ten);
+    	timNhanVienTheoTen(ds,n,ten);
+    	printf("\n==========================");
+    	printf("\n1. Tiep tuc tim kiem.");
+        printf("\n2. Quay lai.");
+        printf("\n==========================");
+        printf("\nChon muc: ");
+        scanf("%d",&k);
+        switch(k){
+            case(1):
+                TKNV();
+                break;
+            case(2):
+                QLNV();
+                break;
+            
+        }
+    }
+    void menuchung::DSNV(){
+    	system("cls");
+    	XuatDanhSachNhanVien(ds,n,tongluong);
+    	printf("\n===================================");
+    	printf("\n------THAO TAC TREN DANH SACH------");
+    	printf("\n1. Xoa nhan vien.");
+    	printf("\n2. Sap xep danh sach theo thu tu alpha B. ");
+    	printf("\n3. Sua thong tin nhan vien.");
+        printf("\n4. Quay lai.");
+        printf("\n===================================");
+        printf("\nChon muc: ");
+        scanf("%d",&k);
+        switch(k){
+            case(1):
+                XNV();
+                break;
+            case(2):
+            	SXDSNV();
+            	break;
+            case(3):
+            	STTNV();
+            	break;
+            case(4):
+                QLNV();
+                break;
+        }
+    }
+
+    void menuchung::SXDSNV(){
+    	system("cls");
+    	sapXepDanhSachNhanVienTheoTen(ds,n);
+    	printf("\n===================================");
+    	printf("\n------THAO TAC TREN DANH SACH------");
+    	printf("\n1. Xoa nhan vien.");
+    	printf("\n2. Sua thong tin nhan vien.");
+        printf("\n3. Quay lai.");
+        printf("\n===================================");
+        printf("\nChon muc: ");
+        scanf("%d",&k);
+        switch(k){
+            case(1):
+                XNV();
+                break;
+            case(2):
+                STTNV();
+                break;
+            case(3):
+                QLNV();
+                break;
+        }
+    }
+    void menuchung::STTNV(){
+    	printf("STT cua nhan vien ban muon sua: ");scanf("%d",&k);
+    	SuaNhanVien(ds,n,k,tongluong);
+    	system("cls");
+    	XuatDanhSachNhanVien(ds,n,tongluong);
+    	printf("\n===================================");
+    	printf("\n------THAO TAC TREN DANH SACH------");
+    	printf("\n1. Xoa nhan vien.");
+    	printf("\n2. Sap xep danh sach theo thu tu alpha B. ");
+    	printf("\n3. Sua thong tin nhan vien.");
+        printf("\n4. Quay lai.");
+        printf("\n===================================");
+        printf("\nChon muc: ");
+        scanf("%d",&k);
+        switch(k){
+            case(1):
+                XNV();
+                break;
+            case(2):
+            	SXDSNV();
+            	break;
+            case(3):
+            	STTNV();
+            	break;
+            case(4):
+                QLNV();
+                break;
+        }
+    }
 
 
 
 
 
 int main(){
+    int login =1 ;
+    while(login<=3){
+    system("cls");
+    string c, d;
+    string a = "admin";
+    string b = "admin";
+    printf("|------------------------------------------|\n");
+    printf("| TAI KHOAN |                              |\n");
+    printf("|------------------------------------------|\n");
+    printf("| MAT KHAU  |                              |\n");
+    printf("|------------------------------------------|");
+    cout<<"\033[2;14H";
+    cin>>c;
+    cout<<"\033[4;14H";
+    cin>>d;
+    cout<<endl;
+
+
+
+    if(c == a && d == a){
+        printf("OK");
+        break;
+    }
+    
+    if(login == 3) printf("tai khoan mat khau sai roi");
+    login++;
+    }
     menuchung m1;
     m1.MENU();
 }
