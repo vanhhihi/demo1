@@ -15,6 +15,7 @@ typedef struct NhanVien{
     int gioCong;
     int luong;
 }NV;
+
 int tongluong=0;
 NV ds[100];
 int n=0;
@@ -92,7 +93,7 @@ void XoaNhanVienTheoMa(NV ds[],int&n,int id,int&tongluong){
 		}
 	}
 	printf("--------------------------------------------------------------------------------------------------------\n");
-    printf("|%3s \t| %25s \t| %6s \t| %10s \t| %10s \t| %12s |","STT","HO VA TEN","GIOI TINH","NGAY SINH","NGAY CONG","LUONG(dong)");
+    printf("|%3s \t| %25s \t| %6s \t| %10s \t| %10s \t| %12s |","STT","HO VA TEN","GIOI TINH","NGAY SINH","SO GIO CONG","LUONG(dong)");
     printf("\n");
     for(int i=0;i<n;i++){
     	printf("--------------------------------------------------------------------------------------------------------\n");
@@ -120,7 +121,7 @@ void XoaNhanVienTheoMa(NV ds[],int&n,int id,int&tongluong){
                 ten[j]+=32;
     }
  	printf("--------------------------------------------------------------------------------------------------------\n");
-    printf("|%3s \t| %25s \t| %6s \t| %10s \t| %10s \t| %12s |","STT","HO VA TEN","GIOI TINH","NGAY SINH","NGAY CONG","LUONG(dong)");
+    printf("|%3s \t| %25s \t| %6s \t| %10s \t| %10s \t| %12s |","STT","HO VA TEN","GIOI TINH","NGAY SINH","SO GIO CONG","LUONG(dong)");
     printf("\n");
  	for(int i=0;i<n;i++){
  		if(strstr(ds2[i].Ten,ten) ){
