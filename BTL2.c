@@ -3,7 +3,7 @@
 #include"vanhc.h"
 #include"hungc.h"
 //vanh
-void TDO(),QLDO(),MENU(),XDO(),TTDO();
+void TDO(),QLDO(),MENU(),XDO(),TTDO(),LDO();
 void BUY(),taobill(),lenbill();
 //hung
 void QLNV();
@@ -16,7 +16,8 @@ void STTNV();
 void LNV();
 void DocFile();
 void GhiVaoFile();
-
+// nn: so luong do uong
+// bn so luong bill
 
 namedrink *a = NULL;
 Bill *bill =NULL;
@@ -26,6 +27,30 @@ void xoanamedrink(int k){
   for(int i=k-1;i<nn;i++) a[i] =a[i+1];
   a = realloc(a,(nn-1)*sizeof(namedrink));
 }
+void ghifile(){
+    FILE *f;
+    f=fopen("vanh.bin","wb");
+    if(f == NULL){
+        printf("\nloi mo file");
+        return;
+    }
+    fwrite(&nn,sizeof(nn),1,f);
+    for(int i=0 ;i<nn;i++) fwrite(&a[i],sizeof(namedrink),1,f);
+    fclose(f);
+}
+void docfile(){
+    FILE *f;
+    f=fopen("vanh.bin","rb");
+    if(f==NULL){
+        printf("\nloi mo file");
+        return;
+    }
+    fread(&nn,sizeof(int),1,f);
+    a = realloc(a,nn*sizeof(namedrink));
+    for(int i = 0 ;i<nn;i++) fread(&a[i],sizeof(namedrink),1,f);
+    fclose(f);
+}
+
 
 
 void MENU(){
@@ -47,7 +72,8 @@ void MENU(){
                 break;
             case 3: QLNV();
                 break;
-            default:  
+            default:
+                ghifile();  
               break;    
         }
 }
@@ -58,8 +84,9 @@ void QLDO(){
         printf("================QUAN LY DO UONG================");
         printf("\n1. Them do uong");
         printf("\n2. Xoa do uong ");
-        printf("\n3. thong tin cua tat ca do uong");    
-        printf("\n4. Quay lai");
+        printf("\n3. thong tin cua tat ca do uong");   
+        printf("\n4.luu thong tin do uong"); 
+        printf("\n5. Quay lai");
         printf("\n==============================================");
         printf("\nchon muc : ");
         scanf("%d",&k);
@@ -71,7 +98,10 @@ void QLDO(){
                 break;
             case 3:TTDO();
                 break; 
-            case 4:MENU();
+            case 4:ghifile();
+                    QLDO();
+                    break;
+            case 5:MENU();
                 break;
             default : {
                 printf("co ve ban chon sai roi");
@@ -460,6 +490,9 @@ void LNV(){
 }
 
 int main(){
+    
+    DocFile(ds,&n,&tongluong);
+    docfile();
   MENU();
 
 
