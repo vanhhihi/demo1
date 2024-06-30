@@ -1,5 +1,5 @@
 #include<iostream>
-//#include"hello.h"
+#include<unistd.h>
 #include<vector>  
 #include<fstream>
 #include"buy.h"
@@ -7,38 +7,52 @@
 using namespace std;
 class menuchung{
 private:
-        void QLDO(), TDO(), XDO(),TTDO();
+        void QLDO(), TDO(), XDO(),TTDO(),ghifile(),docfile();
         void BUY(),taobill(),lenbill();
-        void TNV(),QLNV(),XNV(),TKNV(),SXDSNV(),DSNV(),STTNV();   
+        void TNV(),QLNV(),XNV(),TKNV(),SXDSNV(),DSNV(),STTNV(),LNV();   
         vector<namedrink> drink;
         vector<Bill> bill;
         int k;
      //   int namedrink::n =0
 public:
+    void doc(){
+        docfile();
+    }
     void MENU(){
        system("cls");
         printf("================QUAN LY HE THONG================");
         printf("\n1. Quan ly do uong ");
         printf("\n2. Mua hang");
         printf("\n3. Quan ly nhan vien ");
-      //  printf("\n4. Quan ly bill");
-        printf("\n5. Thoat chuong trinh");
+        printf("\n4. Luu thong tin do uong");
+        printf("\n5. Luu thong tin nhan vien");
+        printf("\n6. Thoat chuong trinh");
         printf("\n=================================================");
         printf("\n chon muc ");
         scanf("%d",&k);
         switch (k){
-            case 1: QLDO(); 
+            case 1: 
+            QLDO();         
                 break;
-            case 2: BUY();
+            case 2: 
+            BUY();
+            
                 break;
-            case 3: QLNV();
+            case 3:
+             QLNV();
                 break;
-            default: {
-                printf(" nhap sai roi ");
+            case 4:
+                ghifile();
+                
                 MENU();
-            }
                 break;
-            case 5: break;    
+            case 5:
+                GhiVaoFile(ds,n,tongluong);
+                
+                MENU();
+                break;
+            default : break;
+                    
         }
     }
 };
@@ -55,14 +69,24 @@ public:
         scanf("%d",&k);
         fflush(stdin);
         switch(k){
-            case 1:TDO();
+            case 1:
+                TDO();
                 break;
-            case 2:XDO();
+            case 2:
+                XDO();
                 break;
-            case 3:TTDO();
+            case 3:
+                TTDO();
                 break; 
-            case 4:MENU();
+            case 4:
+                MENU();
                 break;
+            default : {
+                printf("co ve ban chon sai roi");
+                sleep(1);
+                QLDO();
+                break;
+            }
         }
     }
     void menuchung::TDO(){
@@ -141,11 +165,14 @@ public:
         printf("\n3. quay lai");
         scanf("%d",&k);
         switch(k){
-            case 1:TDO();
+            case 1:
+                TDO();
                     break;
-            case 2:XDO();
+            case 2:
+                XDO();
                     break;
-            case 3:QLDO();
+            case 3:
+                QLDO();
                     break;        
         }
     }
@@ -166,15 +193,18 @@ void menuchung::BUY(){
     printf("\nchon muc :  ");
     cin>>pick;
     switch(pick){
-        case 1 : taobill();
+        case 1 : 
+            taobill();
                 break;
-        case 2 : MENU();
+        case 2 :
+             MENU();
                 break;
     }
 
 }
 
 
+/// @brief 
 void menuchung::taobill(){
         int pick;
         int dem =0;
@@ -209,13 +239,14 @@ void menuchung::taobill(){
     char c ;
     cout<<"viet chu bat ki de tiep tuc : ";
     cin>>c;
+    getchar();
     while(c){
         system("cls");
         if(dem == 0) {   BUY();
         break;
         }
         if(dem == 1){
-            Bill::n ++;
+            ++Bill::n ;
             BUY();
             break;
         }
@@ -231,7 +262,8 @@ void menuchung::taobill(){
         printf("\n1. Them nhan vien.");
         printf("\n2. Danh sach nhan vien.");
         printf("\n3. Tim kiem nhan vien theo keyword.");
-        printf("\n4. Quay lai.");
+        printf("\n4. Luu du lieu nhan vien.");
+        printf("\n5. Quay lai.");
         printf("\n=============================================");
         printf("\nChon muc: ");
         scanf("%d",&k);
@@ -247,6 +279,9 @@ void menuchung::taobill(){
                 TKNV();
                 break;
             case(4):
+                LNV();
+                break;
+            case(5):
                 MENU();
                 break;
         }
@@ -272,6 +307,7 @@ void menuchung::taobill(){
 
     void menuchung::XNV(){
     	printf("Nhap ma cua nhan vien can xoa: ");scanf("%d",&k);
+        system("cls");
     	XoaNhanVienTheoMa(ds,n,k,tongluong);
     	printf("\n===================================");
     	printf("\n------THAO TAC TREN DANH SACH------");
@@ -400,7 +436,33 @@ void menuchung::taobill(){
                 break;
         }
     }
-
+    void menuchung::LNV(){
+        GhiVaoFile(ds,n,tongluong);
+        QLNV();
+    }
+void menuchung:: ghifile(){
+    FILE*f;
+    f=fopen("vanhcpp.bin","wb");
+    if(f==NULL){
+        printf("\nloi mo file");
+        return;
+    }
+    fwrite(&namedrink::n,sizeof(int),1,f);
+    for(int i=0;i<n;i++) fwrite(&drink[i],sizeof(namedrink),1,f);
+    fclose(f);
+}
+void menuchung:: docfile(){
+    FILE*f;
+    f=fopen("vanhcpp.bin","rb");
+    if(f==NULL){
+        printf("\nloi mo file");
+        return;
+    }
+    fread(&namedrink::n,sizeof(int),1,f);
+    drink.resize(namedrink::n);
+    for(int i=0;i<namedrink::n;i++) fread(&drink[i],sizeof(namedrink),1,f);
+    fclose(f);
+}
 
 
 
@@ -426,13 +488,22 @@ int main(){
 
 
     if(c == a && d == a){
+        sleep(2);
         printf("OK");
+        sleep(1);
+        menuchung m1;
+        DocFile(ds,n,tongluong);
+        m1.doc();
+        m1.MENU();
         break;
     }
     
-    if(login == 3) printf("tai khoan mat khau sai roi");
-    login++;
+    if(login == 3){ printf("tai khoan mat khau sai roi");
+    sleep(1);
+        return 0;
     }
-    menuchung m1;
-    m1.MENU();
+    login++;
+    sleep(2);
+    }
+   
 }
