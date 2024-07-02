@@ -203,3 +203,35 @@ void sapXepDanhSachNhanVienTheoTen(NV ds[],int n){
 	    }
 	}
  }
+ void GhiVaoFile( NV ds[],int n,int tongluong){
+ 	FILE*f;
+ 	f=fopen("tenFile.bin","wb");
+ 	if(f==NULL){
+ 		printf("\nLoi mo file de ghi!");
+ 		return ;
+	}
+	fwrite(&n,sizeof(n),1,f);
+	fwrite(&tongluong,sizeof(tongluong),1,f);
+	int i;
+	for( i=0;i<n;i++){
+		fwrite(&ds[i],sizeof(NV),1,f);
+	}
+	fclose(f);
+}
+
+
+void DocFile(NV ds[],int&n,int&tongluong){
+ 	FILE*f;
+ 	f=fopen("tenFile.bin","rb");
+ 	if(f==NULL){
+ 		printf("\nLoi mo file de doc!");
+ 		return ;
+	 }
+	fread(&n,sizeof(n),1,f);
+	fread(&tongluong,sizeof(tongluong),1,f);
+	int i;
+	for( i=0;i<n;i++){
+		fread(&ds[i],sizeof(NV),1,f);
+	}
+	fclose(f);
+}

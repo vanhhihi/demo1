@@ -50,8 +50,6 @@ typedef struct bill{
     double tong;
 }Bill;
 static int bn =0;
-
-
 void xuatbill(Bill b){
     system("cls");
     double tong=0;
@@ -67,5 +65,4 @@ void xuatbill(Bill b){
     printf("---------------------------------------------------------------\n");
     b.tong=tong;
 }
-
 
